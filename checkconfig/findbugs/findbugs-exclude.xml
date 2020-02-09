@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <Match>
+        <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE,NP_PARAMETER_MUST_BE_NONNULL_BUT_MARKED_AS_NULLABLE,RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE,RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE"/>
+    </Match>
+    <Match>
+        <Class name="br.com.damsete.multitenant.hibernate.MultiTenantConnectionProviderImplTest" />
+    </Match>
+</FindBugsFilter>
