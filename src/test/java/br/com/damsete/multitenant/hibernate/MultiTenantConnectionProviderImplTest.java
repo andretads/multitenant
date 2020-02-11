@@ -1,6 +1,5 @@
 package br.com.damsete.multitenant.hibernate;
 
-import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -24,13 +23,11 @@ public class MultiTenantConnectionProviderImplTest {
     private Connection connection;
     @Mock
     private Statement statement;
-    @Mock
-    private Logger logger;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        this.multiTenantConnectionProvider = new MultiTenantConnectionProviderImpl(this.dataSource, this.logger);
+        this.multiTenantConnectionProvider = new MultiTenantConnectionProviderImpl(this.dataSource);
     }
 
     @Test
