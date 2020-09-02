@@ -10,7 +10,7 @@
 
     <groupId>br.com.damsete</groupId>
     <artifactId>multitenant</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.6-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -331,7 +331,7 @@
         <connection>scm:git:git://github.com/andretads/multitenant.git</connection>
         <developerConnection>scm:git:git@github.com:andretads/multitenant.git</developerConnection>
         <url>https://github.com/andretads/multitenant</url>
-        <tag>multitenant-0.0.5</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <reporting>
