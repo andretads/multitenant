@@ -1,7 +1,8 @@
 package br.com.damsete.multitenant.hibernate;
 
-import org.junit.Before;
-import org.junit.Test;
+import br.com.damsete.multitenant.TenantContext;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -10,10 +11,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static br.com.damsete.multitenant.TenantContext.DEFAULT_TENANT;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
-public class MultiTenantConnectionProviderImplTest {
+class MultiTenantConnectionProviderImplTest {
 
     private MultiTenantConnectionProviderImpl multiTenantConnectionProvider;
 
@@ -24,23 +26,23 @@ public class MultiTenantConnectionProviderImplTest {
     @Mock
     private Statement statement;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setUp() {
         MockitoAnnotations.initMocks(this);
         this.multiTenantConnectionProvider = new MultiTenantConnectionProviderImpl(this.dataSource);
     }
 
     @Test
-    public void should_get_any_connection() throws SQLException {
+    void shouldGetAnyConnection() throws SQLException {
         when(this.dataSource.getConnection()).thenReturn(this.connection);
 
-        Connection connection = this.multiTenantConnectionProvider.getAnyConnection();
+        var connection = this.multiTenantConnectionProvider.getAnyConnection();
 
         assertNotNull(connection);
     }
 
     @Test
-    public void should_release_any_connection() throws SQLException {
+    void shouldReleaseAnyConnection() throws SQLException {
         when(this.connection.isClosed()).thenReturn(true);
 
         this.multiTenantConnectionProvider.releaseAnyConnection(this.connection);
@@ -49,39 +51,41 @@ public class MultiTenantConnectionProviderImplTest {
     }
 
     @Test
-    public void should_get_connection() throws SQLException {
+    void shouldGetConnection() throws SQLException {
         when(this.dataSource.getConnection()).thenReturn(this.connection);
         when(this.connection.createStatement()).thenReturn(this.statement);
 
-        Connection connection = this.multiTenantConnectionProvider.getConnection("mytenant");
+        var connection = this.multiTenantConnectionProvider.getConnection("mytenant");
 
         assertNotNull(connection);
     }
 
     @Test
-    public void should_release_connection() throws SQLException {
+    void shouldReleaseConnection() throws SQLException {
         when(this.connection.createStatement()).thenReturn(this.statement);
 
         this.multiTenantConnectionProvider.releaseConnection("mytenant", this.connection);
+
+        assertEquals(DEFAULT_TENANT, TenantContext.getCurrentTenant());
     }
 
     @Test
-    public void should_is_unwrappable_as() {
-        boolean isUnwrappableAs = this.multiTenantConnectionProvider.isUnwrappableAs(Long.class);
+    void shouldIsUnwrappableAs() {
+        var isUnwrappableAs = this.multiTenantConnectionProvider.isUnwrappableAs(Long.class);
 
         assertFalse(isUnwrappableAs);
     }
 
     @Test
-    public void should_unwrap() {
-        Long unwrap = this.multiTenantConnectionProvider.unwrap(Long.class);
+    void shouldUnwrap() {
+        var unwrap = this.multiTenantConnectionProvider.unwrap(Long.class);
 
         assertNull(unwrap);
     }
 
     @Test
-    public void should_supports_aggressive_release() {
-        boolean support = this.multiTenantConnectionProvider.supportsAggressiveRelease();
+    void shouldSupportsAggressiveRelease() {
+        var support = this.multiTenantConnectionProvider.supportsAggressiveRelease();
 
         assertTrue(support);
     }

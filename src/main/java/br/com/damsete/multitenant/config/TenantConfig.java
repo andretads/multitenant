@@ -2,7 +2,6 @@ package br.com.damsete.multitenant.config;
 
 import br.com.damsete.multitenant.filter.TenantFilter;
 import org.hibernate.MultiTenancyStrategy;
-import org.hibernate.cfg.Environment;
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +20,12 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.hibernate.cfg.AvailableSettings.*;
+
 @Configuration
 public class TenantConfig {
 
-    private JpaProperties jpaProperties;
+    private final JpaProperties jpaProperties;
 
     @Autowired
     public TenantConfig(JpaProperties jpaProperties) {
@@ -54,11 +55,11 @@ public class TenantConfig {
                                                                        MultiTenantConnectionProvider multiTenantConnectionProviderImpl,
                                                                        CurrentTenantIdentifierResolver currentTenantIdentifierResolverImpl) {
         Map<String, Object> properties = new HashMap<>(this.jpaProperties.getProperties());
-        properties.put(Environment.MULTI_TENANT, MultiTenancyStrategy.SCHEMA);
-        properties.put(Environment.MULTI_TENANT_CONNECTION_PROVIDER, multiTenantConnectionProviderImpl);
-        properties.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, currentTenantIdentifierResolverImpl);
+        properties.put(MULTI_TENANT, MultiTenancyStrategy.SCHEMA);
+        properties.put(MULTI_TENANT_CONNECTION_PROVIDER, multiTenantConnectionProviderImpl);
+        properties.put(MULTI_TENANT_IDENTIFIER_RESOLVER, currentTenantIdentifierResolverImpl);
 
-        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        var em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
         em.setPackagesToScan("br.com.damsete");
         em.setJpaVendorAdapter(jpaVendorAdapter());

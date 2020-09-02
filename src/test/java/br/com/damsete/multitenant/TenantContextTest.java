@@ -1,24 +1,31 @@
 package br.com.damsete.multitenant;
 
-import org.junit.Test;
+import com.github.javafaker.Faker;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static br.com.damsete.multitenant.TenantContext.DEFAULT_TENANT;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-public class TenantContextTest {
+class TenantContextTest {
+
+    private final Faker faker = new Faker();
 
     @Test
-    public void should_set_tenant() {
-        TenantContext.setCurrentTenant("tenant");
+    void shouldSetTenant() {
+        var tenant = this.faker.name().name();
+
+        TenantContext.setCurrentTenant(tenant);
 
         assertNotNull(TenantContext.getCurrentTenant());
-        assertEquals(TenantContext.getCurrentTenant(), "tenant");
+        assertEquals(tenant, TenantContext.getCurrentTenant());
     }
 
     @Test
-    public void should_clear_tenant() {
+    void shouldClearTenant() {
         TenantContext.clear();
 
         assertNotNull(TenantContext.getCurrentTenant());
-        assertEquals(TenantContext.getCurrentTenant(), "public");
+        assertEquals(DEFAULT_TENANT, TenantContext.getCurrentTenant());
     }
 }

@@ -1,43 +1,49 @@
 package br.com.damsete.multitenant.hibernate;
 
 import br.com.damsete.multitenant.TenantContext;
-import org.junit.Before;
-import org.junit.Test;
+import com.github.javafaker.Faker;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
+import static br.com.damsete.multitenant.TenantContext.DEFAULT_TENANT;
 import static org.junit.Assert.*;
 
-public class CurrentTenantIdentifierResolverImplTest {
+class CurrentTenantIdentifierResolverImplTest {
+
+    private final Faker faker = new Faker();
 
     private CurrentTenantIdentifierResolverImpl currentTenantIdentifierResolver;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setUp() {
         this.currentTenantIdentifierResolver = new CurrentTenantIdentifierResolverImpl();
     }
 
     @Test
-    public void should_resolve_current_tenant_identifier() {
-        TenantContext.setCurrentTenant("tenant");
+    void shouldResolveCurrentTenantIdentifier() {
+        var tenant = this.faker.name().name();
 
-        String tenant = this.currentTenantIdentifierResolver.resolveCurrentTenantIdentifier();
+        TenantContext.setCurrentTenant(tenant);
 
-        assertNotNull(tenant);
-        assertEquals(tenant, "tenant");
+        var currentTenant = this.currentTenantIdentifierResolver.resolveCurrentTenantIdentifier();
+
+        assertNotNull(currentTenant);
+        assertEquals(tenant, currentTenant);
     }
 
     @Test
-    public void should_resolve_current_tenant_identifier_when_clear_tenant() {
+    void shouldResolveCurrentTenantIdentifierWhenClearTenant() {
         TenantContext.clear();
 
-        String tenant = this.currentTenantIdentifierResolver.resolveCurrentTenantIdentifier();
+        var currentTenant = this.currentTenantIdentifierResolver.resolveCurrentTenantIdentifier();
 
-        assertNotNull(tenant);
-        assertEquals(tenant, "public");
+        assertNotNull(currentTenant);
+        assertEquals(DEFAULT_TENANT, currentTenant);
     }
 
     @Test
-    public void should_validate_existing_current_sessions() {
-        boolean valid = this.currentTenantIdentifierResolver.validateExistingCurrentSessions();
+    void shouldValidateExistingCurrentSessions() {
+        var valid = this.currentTenantIdentifierResolver.validateExistingCurrentSessions();
 
         assertTrue(valid);
     }

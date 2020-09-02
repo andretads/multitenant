@@ -1,8 +1,6 @@
 package br.com.damsete.multitenant.hibernate;
 
 import br.com.damsete.multitenant.TenantContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,9 +14,7 @@ public class MultiTenantConnectionProviderImpl implements MultiTenantConnectionP
 
     private static final long serialVersionUID = 1L;
 
-    private final Logger logger = LogManager.getLogger();
-
-    private transient DataSource dataSource;
+    private final transient DataSource dataSource;
 
     @Autowired
     public MultiTenantConnectionProviderImpl(DataSource dataSource) {
@@ -37,7 +33,6 @@ public class MultiTenantConnectionProviderImpl implements MultiTenantConnectionP
 
     @Override
     public Connection getConnection(String tenantIdentifier) throws SQLException {
-        this.logger.info("connection.getConnection >> " + tenantIdentifier);
         final Connection connection = getAnyConnection();
         connection.setSchema(tenantIdentifier);
         return connection;
@@ -45,7 +40,6 @@ public class MultiTenantConnectionProviderImpl implements MultiTenantConnectionP
 
     @Override
     public void releaseConnection(String tenantIdentifier, Connection connection) throws SQLException {
-        this.logger.info("connection.releaseConnection >> " + tenantIdentifier);
         connection.setSchema(TenantContext.DEFAULT_TENANT);
         releaseAnyConnection(connection);
     }
