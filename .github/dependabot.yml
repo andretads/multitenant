@@ -1,0 +1,33 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "08:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: com.github.spotbugs:spotbugs-maven-plugin
+    versions:
+    - 4.2.0
+    - 4.2.2
+  - dependency-name: org.springframework.boot:spring-boot-starter-parent
+    versions:
+    - 2.4.2
+    - 2.4.3
+    - 2.4.4
+  - dependency-name: com.tngtech.archunit:archunit-junit5-engine
+    versions:
+    - 0.15.0
+    - 0.16.0
+    - 0.17.0
+  - dependency-name: org.testcontainers:junit-jupiter
+    versions:
+    - 1.15.1
+    - 1.15.2
+  - dependency-name: org.ow2.asm:asm
+    versions:
+    - "9.0"
+  - dependency-name: org.apache.commons:commons-lang3
+    versions:
+    - "3.11"
